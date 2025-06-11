@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr. Perfect Vicky /title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    input[type="file"] {
+      margin-top: 20px;
+    }
+    .preview {
+      margin-top: 30px;
+    }
+    img, video {
+      max-width: 80%;
+      margin-top: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>📤 अपनी फाइल अपलोड करें</h1>
+  <input type="file" id="fileInput" multiple />
+  <div class="preview" id="preview"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+
+    fileInput.addEventListener('change', () => {
+      preview.innerHTML = '';
+      const files = fileInput.files;
+
+      Array.from(files).forEach(file => {
+        const fileType = file.type;
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          if (fileType.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            preview.appendChild(img);
+          } else if (fileType.startsWith("video/")) {
+            const video = document.createElement("video");
+            video.src = e.target.result;
+            video.controls = true;
+            preview.appendChild(video);
+          } else {
+            const link = document.createElement("a");
+            link.href = e.target.result;
+            link.download = file.name;
+            link.textContent = "डाउनलोड करें: " + file.name;
+            preview.appendChild(link);
+          }
+        };
+
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>
